@@ -52,9 +52,7 @@ class DashScopeReranker(Reranker):
         # Validate top_n parameter
         top_n = self.top_n
         if top_n is not None and not (0 < top_n):
-            logger.warning(
-                f"top_n should be a positive integer, got {self.top_n}, setting top_n to None"
-            )
+            logger.warning(f"top_n should be a positive integer, got {self.top_n}, setting top_n to None")
             top_n = None
 
         # Initialize client
@@ -91,9 +89,7 @@ class DashScopeReranker(Reranker):
 
                 # Set reranking score on the original document
                 # Handle both relevance_score and score fields
-                relevance_score = result.get(
-                    "relevance_score", result.get("score", 1.0)
-                )
+                relevance_score = result.get("relevance_score", result.get("score", 1.0))
                 original_doc.reranking_score = relevance_score
 
                 ranked_documents.append(original_doc)
@@ -114,7 +110,5 @@ class DashScopeReranker(Reranker):
         try:
             return self._rerank(query=query, documents=documents)
         except Exception as e:
-            logger.error(
-                f"Error reranking documents with DashScope: {e}. Returning original documents"
-            )
+            logger.error(f"Error reranking documents with DashScope: {e}. Returning original documents")
             return documents

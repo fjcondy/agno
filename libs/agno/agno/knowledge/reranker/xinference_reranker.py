@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 import requests
+
 from agno.knowledge.document import Document
 from agno.knowledge.reranker.base import Reranker
 from agno.utils.log import logger
@@ -59,9 +60,7 @@ class XinferenceReranker(Reranker):
         # Validate top_n parameter
         top_n = self.top_n
         if top_n is not None and not (0 < top_n):
-            logger.warning(
-                f"top_n should be a positive integer, got {self.top_n}, setting top_n to None"
-            )
+            logger.warning(f"top_n should be a positive integer, got {self.top_n}, setting top_n to None")
             top_n = None
 
         # Prepare document texts
@@ -93,9 +92,7 @@ class XinferenceReranker(Reranker):
 
         # Check response format
         if "results" not in response_data:
-            logger.warning(
-                f"Unexpected response format from Xinference: {response_data}"
-            )
+            logger.warning(f"Unexpected response format from Xinference: {response_data}")
             return documents
 
         results = response_data["results"]
@@ -140,12 +137,8 @@ class XinferenceReranker(Reranker):
         try:
             return self._rerank(query=query, documents=documents)
         except requests.exceptions.RequestException as e:
-            logger.error(
-                f"HTTP error reranking documents with Xinference: {e}. Returning original documents"
-            )
+            logger.error(f"HTTP error reranking documents with Xinference: {e}. Returning original documents")
             return documents
         except Exception as e:
-            logger.error(
-                f"Error reranking documents with Xinference: {e}. Returning original documents"
-            )
+            logger.error(f"Error reranking documents with Xinference: {e}. Returning original documents")
             return documents
